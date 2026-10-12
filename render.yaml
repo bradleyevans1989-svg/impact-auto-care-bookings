@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: impact-auto-care-bookings
+    runtime: node
+    plan: starter            # a paid plan is needed for the persistent disk that holds the database
+    region: singapore        # closest Render region to NSW
+    buildCommand: "true"     # no dependencies to install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    disk:
+      name: bookings-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data
+      - key: TRUST_PROXY
+        value: "1"
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        sync: false          # set this yourself in the Render dashboard
+      - key: RESEND_API_KEY
+        sync: false          # optional: email notifications
+      - key: EMAIL_FROM
+        sync: false          # optional: e.g. Impact Auto Care <bookings@impactautocare.com.au>

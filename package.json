@@ -1,0 +1,12 @@
+{
+  "name": "impact-auto-care-bookings",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Booking requests and admin approvals for Impact Auto Care",
+  "main": "server.js",
+  "engines": { "node": ">=22.5" },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server.js",
+    "test": "node --disable-warning=ExperimentalWarning --test test/*.test.js"
+  }
+}
