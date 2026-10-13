@@ -4,7 +4,7 @@ services:
     runtime: node
     plan: starter            # a paid plan is needed for the persistent disk that holds the database
     region: singapore        # closest Render region to NSW
-    buildCommand: "true"     # no dependencies to install
+    buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /healthz
     disk:
@@ -26,3 +26,14 @@ services:
         sync: false          # optional: email notifications
       - key: EMAIL_FROM
         sync: false          # optional: e.g. Impact Auto Care <bookings@impactautocare.com.au>
+      # Impact Diesel Group booking app (/diesel)
+      - key: DIESEL_LINK_SECRET
+        generateValue: true
+      - key: DIESEL_SMTP_HOST
+        sync: false          # outgoing mail server for service@impactdiesel.com.au
+      - key: DIESEL_SMTP_PORT
+        sync: false
+      - key: DIESEL_SMTP_USER
+        sync: false
+      - key: DIESEL_SMTP_PASS
+        sync: false

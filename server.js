@@ -9,6 +9,11 @@ const crypto = require('node:crypto');
 const { DatabaseSync } = require('node:sqlite');
 const config = require('./config');
 
+// Impact Diesel Group's heavy vehicle booking app runs inside this server under /diesel,
+// so both workshops share one hosting plan. Its code lives in diesel/.
+process.env.DIESEL_PREFIX = process.env.DIESEL_PREFIX || '/diesel';
+const diesel = require('./diesel/server');
+
 // ---------- setup ----------
 
 const PORT = Number(process.env.PORT) || 3000;
@@ -498,6 +503,10 @@ const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, 'http://localhost');
     const { pathname } = url;
     const method = req.method;
+
+    if (pathname === process.env.DIESEL_PREFIX || pathname.startsWith(process.env.DIESEL_PREFIX + '/')) {
+      if (await diesel.handle(req, res)) return;
+    }
 
     if (method === 'GET' && pathname === '/healthz') return sendJson(res, 200, { ok: true });
     if (method === 'GET' && pathname === '/api/config') return handleConfig(req, res);

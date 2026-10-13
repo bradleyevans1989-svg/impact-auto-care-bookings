@@ -5,7 +5,7 @@ Customers request a service booking online. Requests arrive as **pending**, and 
 - Booking form: `/`
 - Admin dashboard: `/admin` (password login)
 
-It's a single small Node.js app with no third-party packages. Bookings are stored in a SQLite database file.
+It's a single small Node.js app. Its only package is nodemailer, used by the Impact Diesel form. Bookings are stored in a SQLite database file.
 
 ![Booking form](screenshots/booking-form.png)
 ![Admin dashboard](screenshots/admin-dashboard.png)
@@ -92,12 +92,31 @@ Everything is in `bookings.db` inside `DATA_DIR`. Copy that file to back up.
 2. **Point the website's booking buttons at it.** The current "Book a service" button links to `tel:0403136074`. Change its link to `https://book.impactautocare.com.au`. Keep "Call to book" as it is for people who prefer to ring.
 3. **Bookmark the admin page** on the workshop phone or computer: `https://book.impactautocare.com.au/admin`. On a phone, "Add to Home Screen" makes it feel like an app.
 
+## Impact Diesel Group bookings (`/diesel`)
+
+The same server also runs Impact Diesel Group's heavy vehicle booking form at `/diesel/`, so both workshops share one hosting plan. Its code is in `diesel/` and it shares nothing else with Impact Auto Care (no database, no admin login).
+
+- Customers pick up to 3 preferred drop-off times (8 am to 6 pm, weekdays, Saturday by appointment).
+- service@impactdiesel.com.au gets an email with a **Confirm** button per time, or **Suggest another time**.
+- The customer is emailed automatically, and can accept a suggested time with one tap or pick new times.
+- No database: each booking travels inside signed links in the emails, so the inbox is the record.
+
+| Variable | What it's for |
+|---|---|
+| `DIESEL_LINK_SECRET` | Long random string that signs the email links. Required. |
+| `DIESEL_SMTP_HOST`, `DIESEL_SMTP_PORT`, `DIESEL_SMTP_USER`, `DIESEL_SMTP_PASS` | Outgoing mail server for service@impactdiesel.com.au (the details in Thunderbird's Outgoing Server settings). |
+| `DIESEL_WORKSHOP_EMAIL` | Optional. Where requests go. Defaults to service@impactdiesel.com.au. |
+| `DIESEL_OUTBOX_KEY` | Optional. Before mail is set up, emails are held at `/diesel/dev/outbox?key=...` for testing. |
+
+To put it on impactdiesel.com.au, paste `diesel/embed-snippet.html` into the page or link a "Book a service" button to `/diesel/`. A custom address such as `book.impactdiesel.com.au` can point at this same service; the form then lives at `book.impactdiesel.com.au/diesel/`.
+
 ## Files
 
 ```
 server.js        web server, database, admin pages
 config.js        hours, services, holidays, business details
 public/          booking form (index.html, app.js, styles.css, logo)
+diesel/          Impact Diesel Group booking app, served at /diesel/
 test/            automated tests (npm test)
 render.yaml      Render deploy config
 Dockerfile       container deploy
