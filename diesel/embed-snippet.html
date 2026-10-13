@@ -1,0 +1,13 @@
+<!-- Impact Diesel booking form. Paste this where the form should appear on impactdiesel.com.au.
+     BOOKING_SITE is the app's address with no trailing slash, e.g. https://impact-auto-care-bookings.onrender.com -->
+<iframe id="idg-booking" src="BOOKING_SITE/diesel/?embed=1" title="Book a service"
+        style="width:100%;min-height:900px;border:0;display:block" loading="lazy"></iframe>
+<script>
+  // Grows the frame to fit the form so there's no inner scrollbar.
+  window.addEventListener("message", function (e) {
+    if (e.origin !== "BOOKING_SITE") return;
+    var f = document.getElementById("idg-booking");
+    if (e.data && e.data.idgBookingHeight) f.style.height = e.data.idgBookingHeight + "px";
+    if (e.data && e.data.idgBookingScrollTop) f.scrollIntoView({ behavior: "smooth" });
+  });
+</script>

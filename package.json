@@ -2,11 +2,16 @@
   "name": "impact-auto-care-bookings",
   "version": "1.0.0",
   "private": true,
-  "description": "Booking requests and admin approvals for Impact Auto Care",
+  "description": "Booking requests for Impact Auto Care, plus the Impact Diesel Group heavy vehicle booking app under /diesel",
   "main": "server.js",
-  "engines": { "node": ">=22.5" },
+  "engines": {
+    "node": ">=22.5"
+  },
   "scripts": {
     "start": "node --disable-warning=ExperimentalWarning server.js",
     "test": "node --disable-warning=ExperimentalWarning --test test/*.test.js"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.16"
   }
 }
